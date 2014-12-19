@@ -1,3 +1,5 @@
-pyttsx
-requests
-wikipedia
+beautifulsoup4==4.3.2
+pyttsx==1.1
+pywin32==217
+requests==2.5.0
+wikipedia==1.4.0
