@@ -12,3 +12,5 @@ Other requirements are specified in the requirements.txt and can be installed vi
 Set up your prerequisites and requirements then simply
 `python ramble.py` and go~
 
+## Known Issues
+Microsoft Mike is not being very compliant at the moment. So stick with Anna for now.

@@ -2,14 +2,20 @@ __author__ = 'Ryan Grigsby'
 import pyttsx, random, time, wikipedia
 
 # in seconds
-RAMBLE_FREQUENCY_MIN = 30*60
-RAMBLE_FREQUENCY_MAX = 60*60
-engine = pyttsx.init()
+RAMBLE_FREQUENCY_MIN = 5*60
+RAMBLE_FREQUENCY_MAX = 10*60
 
-# create a reasonable facsimile for Stuart, if one exists
-for voice in engine.getProperty('voices'):
-    if 'Mike' in voice.name:
-        engine.setProperty('voice', voice.id)
+
+def boot_stuart():
+    engine = pyttsx.init()
+    # create a reasonable facsimile for Stuart, if one exists
+    for voice in engine.getProperty('voices'):
+        if 'Mike' in voice.name:
+            print("*clears throat*")
+            engine.setProperty('voice', voice.id)
+    # sloooww down
+    engine.setProperty('rate', engine.getProperty('rate')-60)
+    return engine
 
 def get_starting_point(length):
     return random.randint(1, length-1) if length > 1 else 0
@@ -21,7 +27,7 @@ def get_rant(summary):
     :return: a Stuart-esque rambling
     '''
     summary = summary.encode('ascii', 'replace')    # we don't care about unicode
-    summary.replace_all('\n', '')     #remove newlines so we dont speak them
+    summary.replace('\n', '')     #remove newlines so we dont speak them
     sentences = summary.split('.')
 
     # we've got to eliminate some context, so get a starting point
@@ -29,9 +35,15 @@ def get_rant(summary):
     return '. '.join(sentences[start:])
 
 
+engine = boot_stuart()
 # TODO : Only ramble during work hours.
 while True:
-    rant = get_rant(wikipedia.summary(wikipedia.random()))
-    engine.say(rant)
-    engine.runAndWait()
-    time.sleep(random.randint(RAMBLE_FREQUENCY_MIN, RAMBLE_FREQUENCY_MAX))
+    try:
+        rant = get_rant(wikipedia.summary(wikipedia.random()))
+        engine.say(rant)
+        engine.runAndWait()
+        #time.sleep(random.randint(RAMBLE_FREQUENCY_MIN, RAMBLE_FREQUENCY_MAX))
+    except Exception as err:
+        print('This computer is...messing up. %s' (str(err)))
+        engine.stop()
+        engine = boot_stuart()
