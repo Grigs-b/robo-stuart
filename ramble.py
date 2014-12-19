@@ -2,8 +2,8 @@ __author__ = 'Ryan Grigsby'
 import pyttsx, random, time, wikipedia
 
 # in seconds
-RAMBLE_FREQUENCY_MIN = 5*60
-RAMBLE_FREQUENCY_MAX = 10*60
+RAMBLE_FREQUENCY_MIN = 30
+RAMBLE_FREQUENCY_MAX = 60
 
 
 def boot_stuart():
@@ -12,7 +12,7 @@ def boot_stuart():
     for voice in engine.getProperty('voices'):
         if 'Mike' in voice.name:
             print("*clears throat*")
-            engine.setProperty('voice', voice.id)
+            #engine.setProperty('voice', voice.id)
     # sloooww down
     engine.setProperty('rate', engine.getProperty('rate')-60)
     return engine
@@ -39,11 +39,16 @@ engine = boot_stuart()
 # TODO : Only ramble during work hours.
 while True:
     try:
+        topic = wikipedia.random()
+        print("I'm reading about {}".format(topic))
         rant = get_rant(wikipedia.summary(wikipedia.random()))
         engine.say(rant)
         engine.runAndWait()
-        #time.sleep(random.randint(RAMBLE_FREQUENCY_MIN, RAMBLE_FREQUENCY_MAX))
+        if not engine.isBusy():
+            print("Time to browse some TalkBass")
+            time.sleep(random.randint(RAMBLE_FREQUENCY_MIN, RAMBLE_FREQUENCY_MAX))
     except Exception as err:
-        print('This computer is...messing up. %s' (str(err)))
+        print("This computer is...messing up.")
+        print(str(err))
         engine.stop()
         engine = boot_stuart()
