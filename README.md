@@ -15,3 +15,6 @@ Set up your prerequisites and requirements then simply
 
 ## Known Issues
 Microsoft Mike is not being very compliant at the moment. So stick with Anna for now.
+
+## Upcoming features
+1. Give robo-stuart a chance to read a random CNN headline instead of a wiki article.
